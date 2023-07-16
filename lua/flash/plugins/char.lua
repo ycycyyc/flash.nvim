@@ -106,6 +106,14 @@ function M.setup()
     end
   end
 
+  -- don't override ;, mappings if they exist
+  for _, key in ipairs({ ";", "," }) do
+    local mapping = vim.fn.maparg(key, "n", false, false)
+    if keys[key] == key and mapping ~= "" then
+      keys[key] = nil
+    end
+  end
+
   for _, key in ipairs({ "f", "F", "t", "T", ";", "," }) do
     if keys[key] then
       vim.keymap.set({ "n", "x", "o" }, keys[key], function()
@@ -214,7 +222,7 @@ function M.jump(key)
 
   -- HACK: When the motion is t or T, we need to set the current position as a valid target
   -- but only when we are not repeating
-  M.current = M.motion:lower() == "t" and parsed.getchar
+  M.current = M.motion:lower() == "t" and parsed.getchar and vim.v.count == 0
 
   -- update the state when needed
   if M.state.pattern:empty() then
