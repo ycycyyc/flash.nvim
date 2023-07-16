@@ -124,7 +124,7 @@ function M.update(state)
       and match.win == state.win
       and state.opts.jump.pos ~= "range"
     then
-      return
+      -- return
     end
     if match.fold then
       -- set the row to the fold start
